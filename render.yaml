@@ -17,11 +17,23 @@ services:
         value: database/database.sqlite
       - key: APP_KEY
         generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
       - key: GROQ_API_KEY
         sync: false
+        required: false
       - key: GOOGLE_API_KEY
         sync: false
+        required: false
       - key: XAI_API_KEY
         sync: false
+        required: false
       - key: OPENROUTER_API_KEY
         sync: false
+        required: false

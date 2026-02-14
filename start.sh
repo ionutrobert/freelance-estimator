@@ -4,20 +4,22 @@ set -e
 # Move to the correct directory
 cd /var/www/html
 
+# CLEAR any existing "bad" key from the environment
+# This ensures Laravel uses the one we generate in the .env file instead
+unset APP_KEY
+
 # Ensure the database directory exists and is writable
 mkdir -p database
 touch database/database.sqlite
 chown -R www-data:www-data database
+chmod -R 775 database/database.sqlite
 chmod -R 775 database
 
-# Create a temporary .env if it doesn't exist (Laravel needs it for key:generate)
-if [ ! -f .env ]; then
-    echo "Creating .env from example..."
-    cp .env.example .env
-fi
+# Create a fresh .env file for the container
+echo "Generating fresh .env..."
+cp .env.example .env
 
-# Ensure we have a valid APP_KEY in the .env file
-# This will write the key to the .env file which Laravel will definitely pick up
+# Generate a perfect 32-character key specifically for this container session
 php artisan key:generate --force --no-interaction
 
 # Run migrations
@@ -31,5 +33,5 @@ chmod -R 775 storage bootstrap/cache
 export LOG_CHANNEL=stderr
 
 # Start Apache
-echo "Starting Apache..."
+echo "Starting Apache... Key generation complete."
 exec apache2-foreground

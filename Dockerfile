@@ -22,6 +22,10 @@ RUN a2enmod rewrite
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install -y nodejs
+
 # Set working directory
 WORKDIR /var/www/html
 
@@ -43,8 +47,7 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Expose port
 EXPOSE 80
 
-# Build SQLite DB and run migrations (for demo purposes)
-RUN touch database/database.sqlite
-RUN php artisan migrate --force
+# Make start script executable
+RUN chmod +x /var/www/html/start.sh
 
-CMD ["apache2-foreground"]
+CMD ["/var/www/html/start.sh"]

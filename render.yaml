@@ -8,7 +8,7 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: false
+        value: true
       - key: DOCUMENT_ROOT
         value: public
       - key: DB_CONNECTION
@@ -16,7 +16,7 @@ services:
       - key: DB_DATABASE
         value: database/database.sqlite
       - key: APP_KEY
-        generateValue: true
+        required: false # start.sh will generate one if missing
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET

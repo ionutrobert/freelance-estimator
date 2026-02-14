@@ -4,6 +4,8 @@ An AI-powered SaaS tool for freelance developers to transform messy client brief
 
 Built with **Laravel 12**, **Livewire 3**, and powered by cutting-edge LLMs (Groq, Google Gemini, xAI, OpenRouter).
 
+Demo Deployment: https://freelance-estimator.onrender.com
+
 ![Hero Screenshot](public/screenshots/Screenshot%202026-02-14%20161441.png)
 
 ## ✨ Features

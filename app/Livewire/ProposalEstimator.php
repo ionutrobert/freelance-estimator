@@ -180,26 +180,26 @@ PROMPT;
 
             $this->results = $data;
 
-            // Ensure we have a price spread (buffer)
+            // Ensure we have a meaningful price spread (buffer)
             $low = $this->results['total_price_low'];
             $high = $this->results['total_price_high'];
 
-            if ($low == $high) {
-                // If AI gave single number, create a 10-20% spread
+            // If spread is less than 5%, or values are identical, create a buffer
+            if ($high <= ($low * 1.05)) {
                 $this->results['total_price_low'] = round($low * 0.95);
-                $this->results['total_price_high'] = round($high * 1.15);
+                $this->results['total_price_high'] = round($low * 1.15);
             }
 
             // 5. Save History (if logged in)
             if (Auth::check()) {
                 $estimate = Auth::user()->estimates()->create([
                     'brief' => $this->brief,
-                    'result' => $data,
+                    'result' => $this->results, // Save the data inclusive of our buffer
                     'provider' => $this->provider,
                     'model' => $model,
-                    'total_hours' => $data['total_hours'] ?? 0,
-                    'price_low' => $data['total_price_low'] ?? 0,
-                    'price_high' => $data['total_price_high'] ?? 0,
+                    'total_hours' => $this->results['total_hours'] ?? 0,
+                    'price_low' => $this->results['total_price_low'] ?? 0,
+                    'price_high' => $this->results['total_price_high'] ?? 0,
                     'currency' => $this->currency,
                     'hourly_rate' => $this->hourly_rate,
                 ]);

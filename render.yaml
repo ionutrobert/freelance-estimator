@@ -21,13 +21,14 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
+      - key: GOOGLE_REDIRECT_URI
+        value: https://freelance-estimator.onrender.com/auth/google/callback
       - key: GITHUB_CLIENT_ID
         sync: false
       - key: GITHUB_CLIENT_SECRET
         sync: false
       - key: GITHUB_REDIRECT_URI
         value: https://freelance-estimator.onrender.com/auth/github/callback
-        required: false
       - key: GROQ_API_KEY
         sync: false
         required: false

@@ -1,11 +1,9 @@
 services:
   - type: web
     name: freelance-estimator
-    env: php
+    runtime: docker # Changed from env: php to runtime: docker
     plan: free
-    region: oregon # Or your preferred region
-    buildCommand: composer install --no-dev && npm install && npm run build && touch database/database.sqlite
-    startCommand: apache2-foreground
+    region: oregon
     envVars:
       - key: APP_ENV
         value: production
@@ -18,7 +16,7 @@ services:
       - key: DB_DATABASE
         value: database/database.sqlite
       - key: APP_KEY
-        generateValue: true # Let Render generate a key if you don't provide one
+        generateValue: true
       - key: GROQ_API_KEY
         sync: false
       - key: GOOGLE_API_KEY

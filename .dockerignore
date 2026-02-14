@@ -1,0 +1,11 @@
+node_modules
+vendor
+.env
+public/storage
+storage/*.key
+.git
+.github
+Dockerfile
+render.yaml
+.gitignore
+README.md

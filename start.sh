@@ -1,31 +1,35 @@
 #!/bin/bash
 set -e
 
-# Ensure database directory exists and is writable
-mkdir -p /var/www/html/database
-touch /var/www/html/database/database.sqlite
-chown -R www-data:www-data /var/www/html/database
-chmod -R 775 /var/www/html/database/database.sqlite
-chmod -R 775 /var/www/html/database
+# Move to the correct directory
+cd /var/www/html
 
-# Check if APP_KEY is set. If not, generate one.
-if [ -z "$APP_KEY" ]; then
-    echo "No APP_KEY found, generating one..."
-    # Generate a key and export it so Laravel can see it
-    export APP_KEY=$(php artisan key:generate --show --no-ansi)
-    echo "Generated APP_KEY: $APP_KEY"
+# Ensure the database directory exists and is writable
+mkdir -p database
+touch database/database.sqlite
+chown -R www-data:www-data database
+chmod -R 775 database
+
+# Create a temporary .env if it doesn't exist (Laravel needs it for key:generate)
+if [ ! -f .env ]; then
+    echo "Creating .env from example..."
+    cp .env.example .env
 fi
 
-# Run migrations as root to ensure full environment access
+# Ensure we have a valid APP_KEY in the .env file
+# This will write the key to the .env file which Laravel will definitely pick up
+php artisan key:generate --force --no-interaction
+
+# Run migrations
 php artisan migrate --force
 
-# Reset permissions for Laravel folders
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Final permission check for storage and cache
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
 
 # Force logging to stderr for Render
 export LOG_CHANNEL=stderr
 
 # Start Apache
 echo "Starting Apache..."
-apache2-foreground
+exec apache2-foreground

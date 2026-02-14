@@ -4,7 +4,7 @@ services:
     env: php
     plan: free
     region: oregon # Or your preferred region
-    buildCommand: composer install --no-dev && npm install && npm run build
+    buildCommand: composer install --no-dev && npm install && npm run build && touch database/database.sqlite
     startCommand: apache2-foreground
     envVars:
       - key: APP_ENV
@@ -18,7 +18,7 @@ services:
       - key: DB_DATABASE
         value: database/database.sqlite
       - key: APP_KEY
-        sync: false # Set this manually in Render dashboard or let it generate
+        generateValue: true # Let Render generate a key if you don't provide one
       - key: GROQ_API_KEY
         sync: false
       - key: GOOGLE_API_KEY
@@ -27,9 +27,3 @@ services:
         sync: false
       - key: OPENROUTER_API_KEY
         sync: false
-
-databases:
-  - type: sqlite
-    name: estimator-db
-    plan: free
-    mountPath: /opt/render/project/src/database

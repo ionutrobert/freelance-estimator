@@ -17,7 +17,7 @@
                     <span class="font-bold text-xl ml-2">Estimator.AI</span>
                 </div>
                 @if (Route::has('login'))
-                    <nav class="flex gap-4">
+                    <nav class="flex items-center gap-4">
                         @auth
                             <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Dashboard</a>
                         @else

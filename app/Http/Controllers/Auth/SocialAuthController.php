@@ -27,7 +27,6 @@ class SocialAuthController extends Controller
         }
 
         try {
-        try {
             $user = User::where('email', $socialUser->getEmail())->first();
 
             if (!$user) {
@@ -46,12 +45,11 @@ class SocialAuthController extends Controller
                     "{$provider}_id" => $socialUser->getId(),
                 ]);
             }
-            
+
             \Illuminate\Support\Facades\Log::info("SocialAuth: Database user updated/created", ['id' => $user->id]);
 
             Auth::login($user, true);
             \Illuminate\Support\Facades\Log::info("SocialAuth: Auth::login called");
-
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('SocialAuth Database/Login Error: ' . $e->getMessage());
             return redirect('/login')->with('error', 'Login error: ' . $e->getMessage());
